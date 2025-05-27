@@ -7,6 +7,7 @@ import { Flexbox } from 'react-layout-kit';
 
 import ActionIcon from '@/ActionIcon';
 import CopyButton from '@/CopyButton';
+import DownloadButton from '@/DownloadButton';
 import { useStyles } from '@/Highlighter/style';
 
 import { MermaidProps } from './type';
@@ -14,6 +15,10 @@ import { MermaidProps } from './type';
 export interface MermaidFullFeaturedProps extends Omit<MermaidProps, 'children'> {
   children: ReactNode;
   content: string;
+  downloadFileName?: string;
+  downloadFileType?: string;
+  downloadable?: boolean;
+  svgBlobUrl?: string;
 }
 
 export const MermaidFullFeatured = memo<MermaidFullFeaturedProps>(
@@ -30,10 +35,15 @@ export const MermaidFullFeatured = memo<MermaidFullFeaturedProps>(
     language = 'mermaid',
     fileName,
     defaultExpand = true,
+    svgBlobUrl,
+    downloadable = true,
+    downloadFileName = 'mermaid',
+    downloadFileType = 'svg',
     ...rest
   }) => {
     const [expand, setExpand] = useState(defaultExpand);
     const { styles, cx } = useStyles('block');
+
     const variants = useMemo(
       () =>
         cva(styles.root, {
@@ -93,7 +103,20 @@ export const MermaidFullFeatured = memo<MermaidFullFeaturedProps>(
       [styles],
     );
 
-    const originalActions = copyable && <CopyButton content={content} size={'small'} />;
+    const originalActions = (
+      <>
+        {copyable && <CopyButton content={content} size={'small'} />}
+        {downloadable && (
+          <DownloadButton
+            blobUrl={svgBlobUrl}
+            disabled={!svgBlobUrl}
+            fileName={downloadFileName}
+            fileType={downloadFileType}
+            size={'small'}
+          />
+        )}
+      </>
+    );
 
     const actions = actionsRender
       ? actionsRender({ actionIconSize: 'small', content, originalNode: originalActions })

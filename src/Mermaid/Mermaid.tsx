@@ -1,7 +1,7 @@
 'use client';
 
 import { cva } from 'class-variance-authority';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
 import CopyButton from '@/CopyButton';
@@ -30,9 +30,13 @@ const Mermaid = memo<MermaidProps>(
     bodyRender,
     actionsRender,
     theme,
+    downloadable = true, // 新增
+    downloadFileName = 'mermaid', // 新增
+    downloadFileType = 'svg', // 新增
     ...rest
   }) => {
     const { cx, styles } = useStyles();
+    const [svgBlobUrl, setSvgBlobUrl] = useState<string>(); // 新增状态
 
     const variants = useMemo(
       () =>
@@ -81,6 +85,7 @@ const Mermaid = memo<MermaidProps>(
       <SyntaxMermaid
         enableNonPreviewWheelZoom={enableNonPreviewWheelZoom}
         enablePanZoom={enablePanZoom}
+        onBlobUrlChange={setSvgBlobUrl} // 传递回调函数
         theme={theme}
         variant={variant}
       >
@@ -100,10 +105,14 @@ const Mermaid = memo<MermaidProps>(
           content={tirmedChildren}
           copyable={copyable}
           defaultExpand={defaultExpand}
+          downloadFileName={downloadFileName}
+          downloadFileType={downloadFileType}
+          downloadable={downloadable} // 传递下载相关属性
           language={language}
           shadow={shadow}
           showLanguage={showLanguage}
           style={style}
+          svgBlobUrl={svgBlobUrl} // 传递 SVG Blob URL
           variant={variant}
           {...rest}
         >

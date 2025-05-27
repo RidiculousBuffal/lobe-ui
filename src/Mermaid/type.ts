@@ -8,9 +8,10 @@ export interface SyntaxMermaidProps {
   children: string;
   enableNonPreviewWheelZoom?: MermaidProps['enableNonPreviewWheelZoom'];
   enablePanZoom?: MermaidProps['enablePanZoom'];
+  onBlobUrlChange?: (blobUrl: string) => void;
   ref?: Ref<HTMLDivElement>;
   theme?: MermaidProps['theme'];
-  variant?: MermaidProps['variant'];
+  variant?: MermaidProps['variant']; // 新增
 }
 
 export interface MermaidProps extends DivProps {
@@ -24,6 +25,9 @@ export interface MermaidProps extends DivProps {
   children: string;
   copyable?: boolean;
   defaultExpand?: boolean;
+  downloadFileName?: string;
+  downloadFileType?: string;
+  downloadable?: boolean;
   enableNonPreviewWheelZoom?: boolean;
   enablePanZoom?: boolean;
   fileName?: string;

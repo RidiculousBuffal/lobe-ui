@@ -12,7 +12,15 @@ import { mermaidThemes } from '../const';
 import type { SyntaxMermaidProps } from '../type';
 
 const SyntaxMermaid = memo<SyntaxMermaidProps>(
-  ({ ref, children, theme: customTheme, variant, enablePanZoom, enableNonPreviewWheelZoom }) => {
+  ({
+    ref,
+    children,
+    theme: customTheme,
+    variant,
+    enablePanZoom,
+    enableNonPreviewWheelZoom,
+    onBlobUrlChange, // 新增回调函数
+  }) => {
     const isDefaultTheme = customTheme === 'lobe-theme' || !customTheme;
 
     const background = useMemo(() => {
@@ -46,7 +54,10 @@ const SyntaxMermaid = memo<SyntaxMermaidProps>(
       // 创建并保存Blob URL
       const url = URL.createObjectURL(svgBlob);
       setBlobUrl(url);
-    }, [isLoading, data]);
+
+      // 通知父组件 blobUrl 已更新
+      onBlobUrlChange?.(url);
+    }, [isLoading, data, onBlobUrlChange]);
 
     const handlePanningStart = () => {
       setIsDragging(true);
